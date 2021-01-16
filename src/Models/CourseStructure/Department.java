@@ -3,10 +3,7 @@ package Models.CourseStructure;
 import Models.DatabaseBehaviours.DBController;
 import Models.DatabaseBehaviours.UserManipulator;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +44,21 @@ public class Department implements CourseStructure{
     }
 
     public void add(){
-        DBController.executeCommand("INSERT INTO Department VALUES ('"+this.departmentCode + "','" + this.departmentName+"');");
+        try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
+
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO Department (departmentCode,departmentName)\n" +
+                                                                "VALUES (?,?);");
+            pstmt.setString(1,this.departmentCode);
+            pstmt.setString(2,this.departmentName);
+            int count = pstmt.executeUpdate();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
+
+
 
     public void remove(){
         UserManipulator.remove(this.departmentCode,"Department","departmentCode");
@@ -71,7 +81,9 @@ public class Department implements CourseStructure{
         }
         return null;
     }
-
+    /**
+     * @return a String array with all Department codes inside the Degree table in the DB
+     */
     public static String[] getAllDepartmentCodes(){
         try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
             Statement stmt = con.createStatement();
@@ -89,6 +101,10 @@ public class Department implements CourseStructure{
         return null;
     }
 
+    /**
+     * @param departmentName
+     * @return the Department Code assign to the specified department name
+     */
     public static String getCodeFromName(String departmentName){
         List<Department> departments = new Department().getAll();
         for (Department department : departments) {

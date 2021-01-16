@@ -1,6 +1,6 @@
 package Models.Tables.CourseStructure;
 
-import Models.CourseStructure.DegreeDepartment;
+import Models.CourseStructure.Degree.DegreeDepartment;
 
 public class DegreeDepartmentTableModel extends CourseStructureTableModel {
 

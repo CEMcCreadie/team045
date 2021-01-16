@@ -1,0 +1,5 @@
+package Models.Graduation;
+
+public enum DegreeClassification {
+    FIRST_CLASS,UPPER_SECOND,LOWER_SECOND,THIRD_CLASS,PASS_NON_HONOURS,PASS,MERIT,DISTINCTION,PG_DIP,PG_CERT
+}

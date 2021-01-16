@@ -1,59 +1,68 @@
 package Views.Teacher;
 
+import Controllers.Teacher.TeacherWelcomeScreenController;
+import Models.Tables.Teacher.GraduateTableModel;
 import Models.Tables.Teacher.TeachesModuleTableModel;
-import Models.UserAccounts.Teacher;
+import Models.UserAccounts.Employee.Teacher;
 import Views.WelcomeScreen;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
-//TODO: Replace the tabbed pane with a jpane so that the tabs can have a scroll pane and also pane at buttom for butts
 public class TeacherWelcomeScreen extends WelcomeScreen {
     private JPanel mainPanel;
     private JTabbedPane tabbedPane1;
-    private JTable assModulesTable;
+    private JTable graduatesTable;
     private JTable assStudentsTable;
-    private JButton logOutButton;
     private JLabel welcomeLabel;
     private JPanel assStudentsPane;
     private JScrollPane assStudentsTableScroll;
     private JPanel assStudentsActButtPane;
-    private JButton stdtApplyButt;
-    private JPanel assModulesPane;
+    private JPanel graduatePane;
     private JScrollPane assModulesTableScroll;
-    private JPanel assignedModulesActButtPane;
-    private JButton viewCohortButt;
     private JButton studentBreakdownButt;
+    private JButton refreshButt;
     private Teacher teacher;
+    private TeacherWelcomeScreenController controller;
+    private TeachesModuleTableModel studentModel;
+    private GraduateTableModel gradModel;
 
     /**
      *
-     * @param moduleColumns Columns for the module table (as an object Object[])
-     * @param studentColumns Columns for the student table (as an object Object [])
+     * @param teacher - Teacher object passed in by
+     * @param controller
      */
-    public TeacherWelcomeScreen(Teacher teacher,Object moduleColumns[], Object studentColumns[]){
+    public TeacherWelcomeScreen(Teacher teacher,TeacherWelcomeScreenController controller){
         super();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.teacher = teacher;
         this.pack();
+        this.controller = controller;
 
-        //TODO: interface the moduleColumns and studentColumns. Need to discuss with callum and salva
-        //instantiating table on modules
-        DefaultTableModel moduleModel = new DefaultTableModel(moduleColumns, 60);
-        assModulesTable.setModel(moduleModel);
-        //instantiating table on students tab
-        //DefaultTableModel studentModel = new DefaultTableModel(studentColumns, 5);
-        // Manually recreating a teacher as if they had logged on
-        TeachesModuleTableModel studentModel = new TeachesModuleTableModel(this.teacher);
-        assStudentsTable.setModel(studentModel);
+        studentBreakdownButt.addActionListener(e ->{
+            int selRowIndex = assStudentsTable.getSelectedRow();
+            //Ensures that there is a row selected
+            if (selRowIndex > -1) {
+                controller.inspectStudentRegistration(studentModel.getRow(selRowIndex));
+            }
+            this.update();
+        });
 
+        this.update();
         //runs method that updates the labels.
         displayWelcomeLabel();
+        refreshButt.addActionListener(e ->{this.update();
+        });
     }
 
     private void displayWelcomeLabel() {
-        //TODO: add functionality that displays the users name and welcomes them
-        welcomeLabel.setText("Welcome (username), Logged in as Teacher ");
+        welcomeLabel.setText("Welcome "+this.teacher.getForename()+", Logged in as Teacher ");
+    }
+
+    private void update(){
+        this.studentModel = new TeachesModuleTableModel(this.teacher);
+        assStudentsTable.setModel(studentModel);
+        this.gradModel = new GraduateTableModel();
+        graduatesTable.setModel(gradModel);
     }
 }

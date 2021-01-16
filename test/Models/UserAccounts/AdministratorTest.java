@@ -1,8 +1,8 @@
 package Models.UserAccounts;
 
 import Models.CourseStructure.Qualification;
-import Models.UserAccounts.Administrator;
-import Models.UserAccounts.UserType;
+import Models.UserAccounts.Employee.Administrator;
+import Models.UserAccounts.Student.*;;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -9,6 +9,10 @@ public class DBController {
     public final static String user = "team045" ;
     public final static String password = "5e15b333";
 
+    /**
+     * This method executes the provided String as SqlCode
+     * @param s
+     */
     public static void executeCommand(String s){
         final String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team045";
         final String user = "team045" ;
@@ -21,6 +25,10 @@ public class DBController {
         }
     }
 
+    /**
+     * This method Creates a Connection object that is connected to the DB
+     * @return the Connection
+     */
     public static Connection getConnection(){
         final String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team045";
         final String user = "team045" ;
@@ -33,6 +41,10 @@ public class DBController {
         return null;
     }
 
+    /**
+     * This method Creates a Statement
+     * @return a Statement object
+     */
     public static Statement createStatement(){
 
         try(Connection con = getConnection()){

@@ -1,7 +1,6 @@
 package Models.Tables.Registrar;
 
-import Models.Tables.Admin.UserTableRow;
-import Models.UserAccounts.Registar;
+import Models.UserAccounts.Employee.Registrar;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 public class RegistrarTableModel extends AbstractTableModel {
 
     private final List<RegistrarTableRow> rows;
-    private Registar registrar = new Registar();
+    private Registrar registrar = new Registrar();
     private String[] columnNames = new String[]{"Reg Number","Username","Degree Code","Level Of Study","Forename","Surname","Email Address"};
     private final Class[] columnClass = new Class[]{Integer.class,String.class,String.class,String.class,String.class,String.class,String.class};
 
@@ -66,7 +65,6 @@ public class RegistrarTableModel extends AbstractTableModel {
 
     public RegistrarTableRow getRow(int rowIndex) {
             return rows.get(rowIndex);
-
     }
 
 }

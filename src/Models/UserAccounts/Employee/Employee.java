@@ -1,6 +1,7 @@
-package Models.UserAccounts;
+package Models.UserAccounts.Employee;
 
-import Models.DatabaseBehaviours.DBController;
+import Models.UserAccounts.User.User;
+import Models.UserAccounts.User.UserType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-public abstract class Employee extends User   {
+public abstract class Employee extends User {
 	
 	private int employeeNumber;
 
@@ -55,7 +56,7 @@ public abstract class Employee extends User   {
 		return genaratedEmployeeNumber;
 	}
   
-	protected void setEmployeeNumber(int employeeNumber) {
+	public void setEmployeeNumber(int employeeNumber) {
 		this.employeeNumber = employeeNumber;
 	}
 

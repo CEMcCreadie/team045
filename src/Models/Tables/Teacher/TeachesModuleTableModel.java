@@ -1,7 +1,7 @@
 package Models.Tables.Teacher;
 
 import Models.Tables.StudentGrade;
-import Models.UserAccounts.Teacher;
+import Models.UserAccounts.Employee.Teacher;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
@@ -11,7 +11,7 @@ public class TeachesModuleTableModel extends AbstractTableModel {
     private final List<StudentGrade> studentGrades;
 
     private final String[] columnNames = new String[] {"Module Code","Forename","Surname","Grade","Resit"};
-    private final Class[] columnClass = new Class[] {String.class,String.class,String.class,Integer.class,Integer.class};
+    private final Class[] columnClass = new Class[] {String.class,String.class,String.class,Integer.class,Boolean.class};
 
     public TeachesModuleTableModel(Teacher teacher){
         this.studentGrades = teacher.getGradesOfStudents();
@@ -68,6 +68,11 @@ public class TeachesModuleTableModel extends AbstractTableModel {
         if(3 == columnIndex) {
             row.setGrade((Integer) value);
         }
+    }
+
+
+    public StudentGrade getRow(int rowIndex) {
+        return studentGrades.get(rowIndex);
     }
 
     @Override

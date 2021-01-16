@@ -1,4 +1,4 @@
-package Models.UserAccounts;
+package Models.UserAccounts.User;
 
 public enum UserType {
 

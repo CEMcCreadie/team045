@@ -30,19 +30,6 @@
               </component>
             </children>
           </scrollpane>
-          <scrollpane id="7a675" binding="gradesPane">
-            <constraints>
-              <tabbedpane title="Grades"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <component id="ccd54" class="javax.swing.JTable" binding="gradesTable">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
-          </scrollpane>
         </children>
       </tabbedpane>
       <component id="8a583" class="javax.swing.JLabel" binding="welcomeLabel">
@@ -59,14 +46,6 @@
         </constraints>
         <properties>
           <text value="Label"/>
-        </properties>
-      </component>
-      <component id="64dd0" class="javax.swing.JButton" binding="logOutButt">
-        <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Log Out"/>
         </properties>
       </component>
       <hspacer id="b87af">

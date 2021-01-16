@@ -1,13 +1,12 @@
 package Views.Registrar;
 
 import Controllers.Registrar.RegistrarWelcomeScreenController;
+import Models.CourseStructure.LevelOfStudy;
 import Models.Tables.Registrar.RegistrarTableModel;
-import Models.UserAccounts.Registar;
+import Models.UserAccounts.Employee.Registrar;
 import Views.WelcomeScreen;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class RegistrarWelcomeScreen extends WelcomeScreen {
     private JPanel mainPanel;
@@ -24,10 +23,10 @@ public class RegistrarWelcomeScreen extends WelcomeScreen {
     private JButton applyStudentButt;
     private JButton inspectRegistrationButt;
     private JLabel welcomeLabel;
-    private Registar registrar;
+    private Registrar registrar;
     private RegistrarWelcomeScreenController controller;
 
-    public RegistrarWelcomeScreen(Registar registrar, RegistrarWelcomeScreenController controller){
+    public RegistrarWelcomeScreen(Registrar registrar, RegistrarWelcomeScreenController controller){
         super();
         this.controller = controller;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,24 +34,57 @@ public class RegistrarWelcomeScreen extends WelcomeScreen {
         this.registrar = registrar;
         this.pack();
 
+        welcomeLabel.setText("Welcome " + registrar.getForename() +" "+ registrar.getSurname()+", Logged in as registrar.");
+        //Sets up the main table
+        RegistrarTableModel viewStntTableModel = new RegistrarTableModel();
+        viewStntTable.setModel(viewStntTableModel);
+      
+        delStntButt.addActionListener(e ->{
+            int selRowIndex = viewStntTable.getSelectedRow();
+            if (selRowIndex > -1){
+                controller.unassignStudent(viewStntTableModel.getRow(selRowIndex));
+            };
+            this.update();
+        });
+
+        inspectRegistrationButt.addActionListener(e -> {
+            int selRowIndex = viewStntTable.getSelectedRow();
+            //Ensures that there is a row selected
+            if (selRowIndex > -1) {
+                controller.inspectStudentRegistration(viewStntTableModel.getRow(selRowIndex));
+            }
+            this.update();
+        });
+
+        applyStudentButt.addActionListener(e -> {
+            //Ensures that there is a row selected
+            int selRowIndex = viewStntTable.getSelectedRow();
+            if (selRowIndex > -1){
+                controller.assignStudent(viewStntTableModel.getRow(selRowIndex),
+                        sntCourseCombo.getSelectedItem().toString(),
+                        periodOfStudyCombo.getSelectedItem().toString());
+            }
+            this.update();
+        });
+        this.update();
+
+    }
+
+    public void update(){
         //Sets up the main table
         RegistrarTableModel viewStntTableModel = new RegistrarTableModel();
         viewStntTable.setModel(viewStntTableModel);
 
+        //Sets the model for the ComboBoxes
+        DefaultComboBoxModel courseComboModel = new DefaultComboBoxModel(registrar.getAllCourses());
+        sntCourseCombo.setModel(courseComboModel);
 
-        inspectRegistrationButt.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selRowIndex = viewStntTable.getSelectedRow();
-                if (selRowIndex > -1) {
-                    controller.inspectStudentRegistration(viewStntTableModel.getRow(selRowIndex));
-                }
-            }
-        });
+        DefaultComboBoxModel levelComboModel = new DefaultComboBoxModel(LevelOfStudy.getAllLevelsOfStudies());
+        periodOfStudyCombo.setModel(levelComboModel);
     }
 
     public static void main(String args[]){
-        //Registar registrar = new Registar();
+        //Registrar registrar = new Registrar();
         //JFrame frame = new RegistrarWelcomeScreen(registrar);
         //frame.setVisible(true);
     }

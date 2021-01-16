@@ -3,11 +3,17 @@ package Views.Admin;
 
 import Controllers.Admin.AdminController;
 import Models.CourseStructure.*;
+import Models.CourseStructure.Degree.Degree;
+import Models.CourseStructure.Degree.DegreeDepartment;
+import Models.CourseStructure.Module.CompulsoryModule;
+import Models.CourseStructure.Module.TeachesModule;
+import Models.CourseStructure.Module.UniModule;
 import Models.Tables.Admin.RemoveSelectedUser;
 import Models.Tables.CourseStructure.*;
 
 import Models.Tables.Admin.UserTableModel;
-import Models.UserAccounts.UserType;
+import Models.UserAccounts.Employee.TeacherDetails;
+import Models.UserAccounts.User.UserType;
 import Views.WelcomeScreen;
 
 import javax.swing.*;
@@ -17,13 +23,9 @@ import java.util.List;
 public class AdminWelcomeScreen extends WelcomeScreen {
     private JPanel mainPanel;
     private JTabbedPane tabbedPanel;
-    private JButton logOutButt;
     private JPanel usersTab;
     private JLabel welcomeLabel;
     private JPanel userTabButtPanel;
-    private JComboBox userAccEditPrivilegeCombo;
-    private JLabel editUserLbl;
-    private JButton assignEditPrivilegeButt;
     private JLabel newUserLabel;
     private JLabel userNameLbl;
     private JButton applyNewUserButt;
@@ -81,7 +83,17 @@ public class AdminWelcomeScreen extends WelcomeScreen {
     private JComboBox degreeDepoDegreeCodeCombo;
     private JButton degreeDepoAddButton;
     private JTable degreeDepoTable;
+    private JTable teachesModuleTable;
+    private JComboBox teacherFullNameComboBox;
+    private JButton addTeacherToModuleButton;
+    private JButton removeTeacherFromModuleButton;
+    private JTable personalTutorsTable;
+    private JButton removeTeacherFromStudentButton;
+    private JButton addTeacherToStudentButton;
+    private JComboBox personalTutorComboBox;
     private AdminController controller;
+    private TeachesModuleTableModel teachesModuleTableModel;
+    private PersonalTutorTableModel personalTutorTableModel;
 
     public AdminWelcomeScreen(AdminController controller){
         super();
@@ -97,7 +109,7 @@ public class AdminWelcomeScreen extends WelcomeScreen {
             this.controller.addDepartment(deptCodeTxtField.getText(), deptNameTxtField.getText());
             deptCodeTxtField.setText("");
             deptNameTxtField.setText("");
-            this.updateDepartmentPane();
+            this.update();
         });
 
         addCourseButt.addActionListener(e -> {
@@ -106,14 +118,14 @@ public class AdminWelcomeScreen extends WelcomeScreen {
             this.degreeCodeTxtField.setText("");
             this.courseNameTxt.setText("");
             this.courseLengthTxtArea.setText("");
-            this.updateCoursePane();
+            this.update();
         });
 
         applyNewUserButt.addActionListener(e -> {
             this.controller.addUser((UserType)userPrivilegeCombo.getSelectedItem(),userForeNameTxtField.getText(),userSurNameTxtField.getText(),passwordTxtField.getText());
             userForeNameTxtField.setText("");
             userSurNameTxtField.setText("");
-            this.updateUserPane();
+            this.update();
         });
 
         moduleAddButton.addActionListener(e -> {
@@ -121,17 +133,27 @@ public class AdminWelcomeScreen extends WelcomeScreen {
             moduleNumberTxtField.setText("");
             moduleNameTxtField.setText("");
             moduleCreditsTxtField.setText("");
-            this.updateModulePane();
+            this.update();
         });
 
         makeCompulsoryButton.addActionListener(e -> {
             this.controller.addCompulsoryModule((String)compDegreeCodeCombo.getSelectedItem(),(String)compModuleCodeCombo.getSelectedItem(),(LevelOfStudy)compLevelCombo.getSelectedItem());
-            this.updateCompulsoryModulePane();
+            this.update();
         });
 
         degreeDepoAddButton.addActionListener(e -> {
             this.controller.addDegreeDepartment((String)degreeDepoDepoCodeCombo.getSelectedItem(),(String)degreeDepoDegreeCodeCombo.getSelectedItem());
-            this.updateDegreeDepartmentPane();
+            this.update();
+        });
+
+        addTeacherToModuleButton.addActionListener(e -> {
+            this.controller.addTeachesModule((String)teacherFullNameComboBox.getSelectedItem(),(TeachesModule)this.teachesModuleTableModel.getRow(teachesModuleTable.getSelectedRow()));
+            this.update();
+        });
+
+        addTeacherToStudentButton.addActionListener(e -> {
+            this.controller.addPersonalTutor((String)personalTutorComboBox.getSelectedItem(),(PersonalTutor)this.personalTutorTableModel.getRow(personalTutorsTable.getSelectedRow()));
+            this.update();
         });
 
         removeSelectDeptButt.addActionListener(new RemoveCourseStructure(this,departmentsTable,new DepartmentsTableModel(new Department())));
@@ -140,7 +162,8 @@ public class AdminWelcomeScreen extends WelcomeScreen {
         removeCompulsoryButton.addActionListener(new RemoveCourseStructure(this,compulsoryModules,new CompulsoryModulesTableModel(new CompulsoryModule())));
         degreeDepoRemoveButton.addActionListener(new RemoveCourseStructure(this,degreeDepoTable,new DegreeDepartmentTableModel(new DegreeDepartment())));
         removeSelectedUserButt.addActionListener(new RemoveSelectedUser(this,usersTable,new UserTableModel()));
-
+        removeTeacherFromModuleButton.addActionListener(new RemoveCourseStructure(this,teachesModuleTable,new TeachesModuleTableModel(new TeachesModule())));
+        removeTeacherFromStudentButton.addActionListener(new RemoveCourseStructure(this,personalTutorsTable,new PersonalTutorTableModel(new PersonalTutor())));
         this.update();
     }
 
@@ -177,6 +200,8 @@ public class AdminWelcomeScreen extends WelcomeScreen {
         this.updateUserPane();
         this.updateCompulsoryModulePane();
         this.updateDegreeDepartmentPane();
+        this.updateTeachesModulePane();
+        this.updatePersonalTutorPane();
     }
 
     private void updateDegreeDepartmentPane(){
@@ -207,6 +232,12 @@ public class AdminWelcomeScreen extends WelcomeScreen {
     private void setCompLevelCombo(){
         DefaultComboBoxModel model = new DefaultComboBoxModel(LevelOfStudy.getAllLevelsOfStudies());
         compLevelCombo.setModel(model);
+    }
+
+    private void setTeacherFullNameComboBox(){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(TeacherDetails.getAllTeachersNamesAndNumbers());
+        teacherFullNameComboBox.setModel(model);
+        personalTutorComboBox.setModel(model);
     }
 
     private void setCompDegreeCodeCombo(){
@@ -244,6 +275,22 @@ public class AdminWelcomeScreen extends WelcomeScreen {
         RemoveSelectedUser rcu = (RemoveSelectedUser)removeSelectedUserButt.getActionListeners()[0];
         rcu.updateTableModel(userTableModel);
         this.setUserPrivilegeComboBox();
+    }
+
+    private void updateTeachesModulePane() {
+        this.teachesModuleTableModel = new TeachesModuleTableModel(new TeachesModule());
+        teachesModuleTable.setModel(this.teachesModuleTableModel);
+        RemoveCourseStructure rcs = (RemoveCourseStructure)removeTeacherFromModuleButton.getActionListeners()[0];
+        rcs.updateTableModel(teachesModuleTableModel);
+        this.setTeacherFullNameComboBox();
+    }
+
+    private void updatePersonalTutorPane(){
+        this.personalTutorTableModel = new PersonalTutorTableModel(new PersonalTutor());
+        personalTutorsTable.setModel(this.personalTutorTableModel);
+        RemoveCourseStructure rcs = (RemoveCourseStructure)removeTeacherFromStudentButton.getActionListeners()[0];
+        rcs.updateTableModel(personalTutorTableModel);
+        this.setTeacherFullNameComboBox();
     }
 
 }

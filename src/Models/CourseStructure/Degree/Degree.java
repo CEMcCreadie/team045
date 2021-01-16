@@ -1,16 +1,15 @@
-package Models.CourseStructure;
+package Models.CourseStructure.Degree;
 
+import Models.CourseStructure.CourseStructure;
+import Models.CourseStructure.Qualification;
 import Models.DatabaseBehaviours.DBController;
 import Models.DatabaseBehaviours.UserManipulator;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Degree implements CourseStructure{
+public class Degree implements CourseStructure {
 
     private final String tableName = "Degree";
     private final String primaryColumnName = "degreeCode";
@@ -31,7 +30,7 @@ public class Degree implements CourseStructure{
         this.yearInIndustry = false;
     }
 
-    public Degree(String degreeCode, String courseName, int lengthOfStudy, boolean yearInIndustry,Qualification qualification){
+    public Degree(String degreeCode, String courseName, int lengthOfStudy, boolean yearInIndustry, Qualification qualification){
         this.degreeCode = degreeCode;
         this.courseName = courseName;
         this.lengthOfStudy = lengthOfStudy;
@@ -39,12 +38,25 @@ public class Degree implements CourseStructure{
         this.qualification = qualification;
     }
 
+    /**
+     * Turn True to 1 and False to 0
+     * @param x
+     * @return 0,1
+     */
     public int boolToInt(boolean x){
         return x ? 1 : 0 ;
     }
-
+    /**
+     * Turn 1 to True and 0 to False
+     * @param x
+     * @return 0,1
+     */
     public boolean IntToBool(int x){
         return x == 1;
+    }
+
+    public Qualification getQualification() {
+        return qualification;
     }
 
     @Override
@@ -80,10 +92,24 @@ public class Degree implements CourseStructure{
     public Class[] getVariableClass(){ return new Class[] {String.class,String.class,Integer.class,Boolean.class,String.class};}
 
     public void add(){
-        String values = this.degreeCode + "','" + this.courseName + "','" + this.lengthOfStudy + "','" + this.boolToInt(this.yearInIndustry)
-                + "','" + this.qualification.toString() ;
-        DBController.executeCommand("INSERT INTO Degree VALUES ('"+values+"');");
+        try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
+
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO Degree (degreeCode,courseName,lengthOfStudy,yearInIndustry,qualification)\n" +
+                    "VALUES (?,?,?,?,?);");
+            pstmt.setString(1,this.degreeCode);
+            pstmt.setString(2,this.courseName);
+            pstmt.setInt(3,this.lengthOfStudy);
+            pstmt.setInt(4,this.boolToInt(this.yearInIndustry));
+            pstmt.setString(5,this.qualification.toString());
+            int count = pstmt.executeUpdate();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
+
+
 
     public void remove(){
         UserManipulator userManipulator = new UserManipulator();
@@ -111,6 +137,9 @@ public class Degree implements CourseStructure{
         return null;
     }
 
+    /**
+     * @return a String array with all Degree code inside the Degree table in the DB
+     */
     public static String[] getAllDegreeCodes(){
         try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
             Statement stmt = con.createStatement();

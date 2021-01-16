@@ -1,11 +1,8 @@
-package Models.UserAccounts;
+package Models.UserAccounts.User;
 
 import Models.DatabaseBehaviours.DBController;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class User {
 	
@@ -100,6 +97,22 @@ public class User {
 	public String createEmail(String username){
 		String email = username+"@shef.ac.uk";
 		return email;
+	}
+	public boolean exists(){
+		try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
+
+			PreparedStatement pstmt = con.prepareStatement("SELECT * FROM User\n" +
+																"WHERE username=? ;");
+			pstmt.setString(1,this.getUsername());
+
+
+			ResultSet rs = pstmt.executeQuery();
+			return rs.isBeforeFirst();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return false;
 	}
 
 

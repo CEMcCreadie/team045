@@ -77,9 +77,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <model>
-                <item value="Data in here will be recieved from DB"/>
-              </model>
+              <model/>
             </properties>
           </component>
         </children>
@@ -97,7 +95,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Year of Study"/>
+              <text value="Level of Study"/>
             </properties>
           </component>
           <component id="e2f94" class="javax.swing.JComboBox" binding="periodOfStudyCombo">
@@ -105,11 +103,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <model>
-                <item value="2019-2020"/>
-                <item value="2020-2021"/>
-                <item value="2021-2022"/>
-              </model>
+              <model/>
             </properties>
           </component>
           <component id="a0160" class="javax.swing.JButton" binding="applyStudentButt">

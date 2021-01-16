@@ -1,5 +1,6 @@
 package Models.CourseStructure;
 
+import Models.CourseStructure.Module.UniModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

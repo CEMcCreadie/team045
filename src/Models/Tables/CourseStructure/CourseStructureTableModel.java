@@ -77,4 +77,8 @@ public abstract class CourseStructureTableModel extends AbstractTableModel {
         return false;
     }
 
+    public CourseStructure getRow(int rowIndex){
+        return this.courseStructureList.get(rowIndex);
+    }
+
 }

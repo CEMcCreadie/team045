@@ -1,7 +1,11 @@
 package Models.Tables;
 
+import Models.CourseStructure.LevelOfStudy;
+import Models.DatabaseBehaviours.DBController;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 public class StudentGrade {
@@ -10,28 +14,22 @@ public class StudentGrade {
     private String moduleCode;
     private String forename;
     private String surname;
-    private String levelOfStudyTaken;
+    private LevelOfStudy levelOfStudyTaken;
     private int grade;
-    private int resit;
+    private boolean resit;
 
     protected final String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team045";
     protected final String user = "team045" ;
     protected final String password = "5e15b333";
 
-    public StudentGrade(int regNumber, String moduleCode,String forename, String surname, int grade, int resit) {
+    public StudentGrade(int regNumber, String moduleCode, String forename, String surname, int grade, boolean resit, LevelOfStudy levelOfStudy) {
         this.regNumber = regNumber;
         this.moduleCode = moduleCode;
         this.forename = forename;
         this.surname = surname;
         this.grade = grade;
         this.resit = resit;
-    }
-
-    public StudentGrade(String moduleCode,String levelOfStudyTaken,int grade, int resit) {
-        this.moduleCode = moduleCode;
-        this.levelOfStudyTaken = levelOfStudyTaken;
-        this.grade = grade;
-        this.resit = resit;
+        this.levelOfStudyTaken = levelOfStudy;
     }
 
     public int getRegNumber() { return  regNumber;}
@@ -46,27 +44,30 @@ public class StudentGrade {
         return surname;
     }
 
-    public String getLevelOfStudyTaken() {return levelOfStudyTaken;}
+    public String getLevelOfStudyTaken() {return levelOfStudyTaken.toString();}
 
     public int getGrade() {
         return grade;
     }
 
-    public int getResit() {
+    public boolean getResit() {
         return resit;
     }
 
+    public void setResit(Boolean bool){
+        this.resit = bool;
+        String query = "UPDATE StudentModule SET resit = " + this.resit + " WHERE regNumber = " + this.getRegNumber() + " AND moduleCode = '" + this.getModuleCode() + "' ;";
+        DBController.executeCommand(query);
+    }
+
     public void setGrade(int grade) {
-        this.grade = grade;
-        try (Connection con = DriverManager.getConnection(this.url,this.user,this.password)){
-            Statement stmt = con.createStatement();
-            String query = "UPDATE StudentModule SET grade = " + this.getGrade() + " WHERE regNumber = " + this.getRegNumber() +
-                    " AND moduleCode = '" + this.getModuleCode() + "' ;";
-            System.out.println(query);
-            stmt.execute(query);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (resit == true && grade > 40){
+            this.grade = 40;
+        } else {
+            this.grade = grade;
         }
+        String query = "UPDATE StudentModule SET grade = " + this.getGrade() + " WHERE regNumber = '" + this.getRegNumber() + "' AND moduleCode = '" + this.getModuleCode() + "' ;";
+        DBController.executeCommand(query);
     }
 
 }

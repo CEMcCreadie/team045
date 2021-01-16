@@ -1,6 +1,6 @@
 package Models.Tables.CourseStructure;
 
-import Models.CourseStructure.CompulsoryModule;
+import Models.CourseStructure.Module.CompulsoryModule;
 
 public class CompulsoryModulesTableModel extends CourseStructureTableModel{
 

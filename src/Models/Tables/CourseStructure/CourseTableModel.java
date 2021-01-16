@@ -1,9 +1,6 @@
 package Models.Tables.CourseStructure;
 
-import Models.CourseStructure.Degree;
-
-import javax.swing.table.AbstractTableModel;
-import java.util.List;
+import Models.CourseStructure.Degree.Degree;
 
 public class CourseTableModel extends CourseStructureTableModel{
 

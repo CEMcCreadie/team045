@@ -4,13 +4,8 @@ import Models.Tables.StudentGrade;
 
 import javax.swing.table.AbstractTableModel;
 
-import Models.UserAccounts.Employee;
-import Models.UserAccounts.Student;
-import Models.UserAccounts.Teacher;
+import Models.UserAccounts.Student.*;;
 
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentModuleTable extends AbstractTableModel {

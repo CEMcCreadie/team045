@@ -1,11 +1,6 @@
 package Models.CourseStructure;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.math.BigDecimal;
-import Models.DatabaseBehaviours.DBController;
-import Models.CourseStructure.Degree;
 import Models.DatabaseBehaviours.UserManipulator;
-import Models.UserAccounts.*;
+import Models.UserAccounts.Student.*;;
 
 public class Progression {
 

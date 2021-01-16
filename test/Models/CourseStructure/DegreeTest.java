@@ -1,6 +1,6 @@
 package Models.CourseStructure;
 
-import Models.UserAccounts.Administrator;
+import Models.CourseStructure.Degree.Degree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -33,6 +33,7 @@ public class Password {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-384");
+            // prepend salt onto password
             md.update(this.getSalt());
             byte[] bytes = md.digest(password.getBytes());
             StringBuilder sb = new StringBuilder();

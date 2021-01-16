@@ -2,24 +2,21 @@ package Controllers.LogIn;
 
 
 import Controllers.Admin.AdminController;
+import Controllers.Registrar.RegistrarWelcomeScreenController;
+import Controllers.Teacher.TeacherWelcomeScreenController;
 import Models.Authentication.Login;
-import Models.DatabaseBehaviours.DBController;
-import Models.Tables.StudentGrade;
-import Models.UserAccounts.*;
+import Models.UserAccounts.Employee.Administrator;
+import Models.UserAccounts.Employee.Registrar;
+import Models.UserAccounts.Employee.Teacher;
+import Models.UserAccounts.Student.*;;
+import Models.UserAccounts.User.UserAccountBuilder;
 import Views.Admin.AdminWelcomeScreen;
 import Views.LogIn;
+import Views.Registrar.RegistrarWelcomeScreen;
 import Views.Student.StudentWelcomeScreen;
 import Views.Teacher.TeacherWelcomeScreen;
-import com.mysql.cj.log.Log;
 
 import javax.swing.*;
-import java.awt.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 /**
  * Action listeners are added in login class and methods are called here
@@ -47,6 +44,7 @@ public class LogInController {
         }
     }
 
+
     public JFrame getUserFrame(String username) {
         UserAccountBuilder builder = new UserAccountBuilder(username);
         if (Student.exist(username)) {
@@ -61,10 +59,10 @@ public class LogInController {
                 return new AdminWelcomeScreen(adminController);
             case TEACHER:
                 Teacher teacher = builder.employeeBuilder(new Teacher());
-                return new TeacherWelcomeScreen(teacher, new Object[]{"Module", "Columns"}, new Object[]{"Student", "Columns"});
+                return new TeacherWelcomeScreen(teacher, new TeacherWelcomeScreenController(teacher));
             case REGISTRAR:
-                builder.employeeBuilder(new Registar());
-                return null;
+                Registrar registrar = builder.employeeBuilder(new Registrar());
+                return new RegistrarWelcomeScreen(registrar, new RegistrarWelcomeScreenController(registrar));
             default:
                 return null;
         }

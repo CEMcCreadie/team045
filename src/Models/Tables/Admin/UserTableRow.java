@@ -2,10 +2,7 @@ package Models.Tables.Admin;
 
 import Models.DatabaseBehaviours.DBController;
 import Models.DatabaseBehaviours.UserManipulator;
-import Models.Tables.StudentGrade;
-import Models.UserAccounts.Administrator;
-import Models.UserAccounts.User;
-import Models.UserAccounts.UserType;
+import Models.UserAccounts.User.UserType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -69,7 +66,7 @@ public class UserTableRow {
     public static List<UserTableRow> getAllUserTableRow() {
         String query = "SELECT User.*, Employee.employeeNumber, Employee.role,Student.regNumber FROM User LEFT JOIN Student ON Student.username = User.username" +
                 " LEFT JOIN Employee ON Employee.username = User.username;";
-        System.out.println(query);
+
         List<UserTableRow> userTableRows = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
             Statement stmt = con.createStatement();

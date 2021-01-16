@@ -9,15 +9,22 @@ import java.util.Base64;
 
 public class Login {
 
+    /**
+     * this method is used to authenticate the login That is being executed
+     * @param username , users username
+     * @param password , the password assigned to the inputed username( if it is right then True)
+     * @return True if Login details are Right and False if they are incorrect
+     */
     public static boolean loginAuthenticated(String username, String password){
         try (Connection con = DriverManager.getConnection(DBController.url,DBController.user,DBController.password)){
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Password WHERE username = '" + username + "' ;");
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM Password WHERE username =? ;");
+            pstmt.setString(1,username);
+            ResultSet rs = pstmt.executeQuery();
             String salt = "";
             String hash = "";
             while (rs.next()){
-               hash = rs.getString("password");
-               salt = rs.getString("salt");
+                hash = rs.getString("password");
+                salt = rs.getString("salt");
             }
             byte[] bytes = Base64.getDecoder().decode(salt);
             Password password1 = new Password(password,bytes);
@@ -26,10 +33,6 @@ public class Login {
             ex.printStackTrace();
         }
         return false;
-    }
-
-    public static void main (String[] args){
-        System.out.println(loginAuthenticated("Lembrei","test123"));
     }
 
 }
